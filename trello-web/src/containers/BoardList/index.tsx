@@ -28,7 +28,6 @@ class BoardList extends React.PureComponent<BoardListProps> {
 
     public updateRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
         const roomName = e.target.value;
-
         this.setState({
             roomName,
         });
@@ -36,14 +35,16 @@ class BoardList extends React.PureComponent<BoardListProps> {
     }
     temp = 1;
     public render() {
+     
         return (
             <div className='app'>
                 <div>
                     {this.state.boardName}
                     <br />
                     <input type='text'
-                           value={this.state.boardName}
-                           onChange={(e) => this.updateRoomName(e)}
+                        //    value={this.state.boardName}
+                        onChange={(e) => this.updateRoomName(e)}
+                        placeholder="Nazwa tablicy"
                     />
                     <Button style={{margin: 5}} onClick={this.addBoard}>Dodaj tablicę</Button>
                 </div>
