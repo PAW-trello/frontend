@@ -27,7 +27,7 @@ const App: React.FC = () => {
                 </Navbar>
                 <Switch>
                     <Route exact={true} path='/' component={BoardList}/>
-                    <Route exact={true} path='/board' component={SingleBoard}/>
+                    <Route path='/board/:id' component={SingleBoard}/>
                 </Switch>
             </div>
         </Router>
