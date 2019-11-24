@@ -1,7 +1,5 @@
 import React from 'react';
 import { Card, CardBody, CardTitle, Button, Col } from 'reactstrap';
-import { throws } from 'assert';
-
 interface SingleCardProps {
     id: number;
     name: string;

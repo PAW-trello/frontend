@@ -1,13 +1,6 @@
 import React from 'react';
 import SingleCard from "../../components/SingleCard";
-import {
-    Navbar,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-} from 'reactstrap';
-import { Container, Row, Card, CardBody, CardTitle, Button, Col } from 'reactstrap';
+import { Container, Button } from 'reactstrap';
 
 interface BoardListProps {
     id: number;
