@@ -13,7 +13,10 @@ const create = () => {
     });
     const setAuthorizationHeader = (token: string) => api.setHeader('Authorization', `Bearer ${token}`)
     const logout = () => delete api.headers['Authorization']
-    const register = (registerPayload: RegisterPayload) => api.post(`signup`, registerPayload)
+    const register = (registerPayload: RegisterPayload) => {
+        api.post(`signup`, registerPayload)
+        console.log(registerPayload);
+    }
     return {
         logout,
         setAuthorizationHeader,

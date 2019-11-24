@@ -7,7 +7,7 @@ import {
   Input,
   Container,
   Row,
-  Col,
+  Col
 } from "reactstrap";
 
 import api from "../../utils/api";
@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
     .required("Uzupełnij email")
 });
 export const Register = () => {
-  console.log('xDDDDDDD')
+  console.log("xDDDDDDD");
   const handleSubmit = ({
     username,
     email,
@@ -39,23 +39,23 @@ export const Register = () => {
     console.log(email);
     console.log(password);
     console.log(password_confirmation);
-    api
+   api
       .register({
-        username,
-        password,
+        username,  
         email,
+        password,
         password_confirmation
-      })
-      .then(({ ok, data }) => {
+      }).then(({ok, data}) => {
         if (ok) {
-         console.log('zostales zarejestrowany')
+          console.log('zarejestrowano xd')
         } else {
-          console.log('cos sie zjebalo');
+          console.log('nie')
         }
       })
       .catch(e => {
         console.log(e);
       });
+
   };
 
   return (
@@ -70,7 +70,7 @@ export const Register = () => {
               validationSchema={validationSchema}
             >
               {({
-                values: { username, password, email,password_confirmation },
+                values: { password, email, username, password_confirmation },
                 errors,
                 touched,
                 handleSubmit,
@@ -78,58 +78,72 @@ export const Register = () => {
                 handleBlur
               }) => {
                 return (
-                  <>
-                    <FormGroup>
-                      <Label for="exampleEmail">Nazwa użytkownika</Label>
-                      <Input
-                        type="text"
-                        name="username"
-                        value={username}
-                        onChange={handleChange("username")}
-                        error={touched.username && (errors.username as string)}
-                        placeholder="Wpisz nazwę użytkownika"
-                        onBlur={handleBlur("username")}
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="exampleEmail">Email</Label>
-                      <Input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={handleChange("email")}
-                        error={touched.email && (errors.email as string)}
-                        onBlur={handleBlur("email")}
-                        placeholder="Wpisz email"
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="examplePassword">Hasło</Label>
-                      <Input
-                        type="password"
-                        name="password"
-                        onChange={handleChange("password")}
-                        onBlur={handleBlur("password")}
-                        error={touched.password && (errors.password as string)}
-                        value={password}
-                        placeholder="Wpisz hasło"
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="examplePassword">Potwierdź hasło</Label>
-                      <Input
-                        type="password"
-                        name="password_confirmation"
-                        onChange={handleChange("password_confirmation")}
-                        onBlur={handleBlur("password_confirmation")}
-                        error={touched.password_confirmation && (errors.password_confirmation as string)}
-                        value={password_confirmation}
-                        placeholder="Wpisz ponownie hasło"
-                      />
-                    </FormGroup>
+                  <form onSubmit={handleSubmit}>
+                    <label htmlFor="email" style={{ display: "block" }}>
+                      Nazwa użytkownika
+                    </label>
+                    <Input
+                      id="username"
+                      placeholder="Wpisz email"
+                      type="text"
+                      value={username}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    />
+                    {errors.username && touched.username && (
+                      <div className="input-feedback">{errors.username}</div>
+                    )}
+                    <label htmlFor="email" style={{ display: "block" }}>
+                      Email
+                    </label>
+                    <Input
+                      id="email"
+                      placeholder="Wpisz email"
+                      type="text"
+                      value={email}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    />
+                    {errors.email && touched.email && (
+                      <div className="input-feedback">{errors.email}</div>
+                    )}
+                    <label htmlFor="email" style={{ display: "block" }}>
+                      Hasło
+                    </label>
+                    <Input
+                      id="password"
+                      placeholder="Wpisz Hasło"
+                      type="password"
+                      value={password}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    />
+                    {errors.password && touched.password && (
+                      <div className="input-feedback">{errors.password}</div>
+                    )}
 
-                    <Button onClick={handleSubmit}>Zarejestruj się</Button>
-                  </>
+                    <label htmlFor="email" style={{ display: "block" }}>
+                      Potwierdzenie hasła
+                    </label>
+                    <Input
+                      id="password_confirmation"
+                      placeholder="Wpisz Hasło"
+                      type="password"
+                      value={password_confirmation}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    />
+                    {errors.password_confirmation &&
+                      touched.password_confirmation && (
+                        <div className="input-feedback">
+                          {errors.password_confirmation}
+                        </div>
+                      )}
+
+                    <Button type="submit" onClick={handleSubmit}>
+                      Zarejestruj się
+                    </Button>
+                  </form>
                 );
               }}
             </Formik>
