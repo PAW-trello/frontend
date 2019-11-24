@@ -34,17 +34,13 @@ export const Register = () => {
     password,
     password_confirmation
   }: typeof initialValues) => {
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(password_confirmation);
+    console.log(username + email + password + password_confirmation )
    api
       .register({
         username,  
         email,
         password,
         password_confirmation
-        //@ts-ignore
       }).then(({ok, data}) => {
         if (ok) {
           console.log('zarejestrowano xd')
