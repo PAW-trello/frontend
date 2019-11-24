@@ -10,7 +10,38 @@ import {
   Col
 } from "reactstrap";
 
+import api from '../../utils/api';
+import RegisterPayload from "../../typings";
+
 export default class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: "",
+      email: "",
+      username: "",
+      password_confirmation: ""
+    };
+
+      this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    console.log(target);
+    console.log(value);
+    console.log(name);
+
+    this.setState({
+      [name]: value
+    });
+    }
+    handleSubmit(event) {
+       
+      }
+
   render() {
     return (
       <Container>
@@ -21,32 +52,41 @@ export default class Register extends Component {
               <FormGroup>
                 <Label for="exampleEmail">Nazwa użytkownika</Label>
                 <Input
-                  type="username"
+                  type="text"
                   name="username"
-                  id="username"
-                  placeholder="with a placeholder"
+                  onChange={this.handleInputChange}
+                  placeholder="Wpisz nazwę użytkownika"
                 />
-                        </FormGroup>
-                        <FormGroup>
-            <Label for="exampleEmail">Email</Label>
-            <Input
-              type="email"
-              name="email"
-              id="exampleEmail"
-              placeholder="with a placeholder"
-            />
-          </FormGroup>
+              </FormGroup>
               <FormGroup>
-                <Label for="examplePassword">Password</Label>
+                <Label for="exampleEmail">Email</Label>
+                <Input
+                  type="email"
+                  name="email"
+                  onChange={this.handleInputChange}
+                  placeholder="Wpisz email"
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="examplePassword">Hasło</Label>
                 <Input
                   type="password"
                   name="password"
-                  id="examplePassword"
-                  placeholder="password placeholder"
+                  onChange={this.handleInputChange}
+                  placeholder="Wpisz hasło"
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="examplePassword">Potwierdź hasło</Label>
+                <Input
+                  type="password"
+                  name="password_confirmation"
+                  onChange={this.handleInputChange}
+                  placeholder="Wpisz ponownie hasło"
                 />
               </FormGroup>
 
-              <Button>Zarejestruj się</Button>
+              <Button onClick={this.handleSubmit}>Zarejestruj się</Button>
             </Form>
           </Col>
         </Row>

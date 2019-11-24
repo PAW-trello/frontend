@@ -1,5 +1,6 @@
 import apisauce from 'apisauce'
-// import { BoardList } from '../containers/BoardList' 
+import RegisterPayload from '../typings'
+
 const baseURL = "https://mighty-hollows-81695.herokuapp.com/"
 
 const create = () => {
@@ -10,5 +11,16 @@ const create = () => {
         headers: { 'Cache-Control': 'no-cache' },
         timeout: THIRTY_SECONDS_TIMEOUT,
     });
-    // const addBoard = (addBoardpayload: BoardList) => api.post(`boards`, addBoardpayload);
+    const setAuthorizationHeader = (token: string) => api.setHeader('Authorization', `Bearer ${token}`)
+    const logout = () => delete api.headers['Authorization']
+    const register = (registerPayload: RegisterPayload) => api.post(`signup`, registerPayload)
+    return {
+        logout,
+        setAuthorizationHeader,
+        register
+    }
 }
+const api = () => create()
+
+
+export default api()

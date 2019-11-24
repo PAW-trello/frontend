@@ -10,9 +10,9 @@ import {
   Container
 } from "reactstrap";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import SingleBoard from "./containers/SingleBoard";
-import Login from "./containers/Login";
-import Register from "./containers/Register";
+import SingleBoard from "../src/containers/SingleBoard";
+import Login from "../src/containers/Login";
+import Register from "../src/containers/Register";
 
 const App: React.FC = () => {
   return (
