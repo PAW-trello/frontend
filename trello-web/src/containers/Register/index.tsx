@@ -28,7 +28,6 @@ const validationSchema = Yup.object().shape({
     .required("Uzupełnij email")
 });
 export const Register = () => {
-  console.log("xDDDDDDD");
   const handleSubmit = ({
     username,
     email,
@@ -45,11 +44,12 @@ export const Register = () => {
         email,
         password,
         password_confirmation
+        //@ts-ignore
       }).then(({ok, data}) => {
         if (ok) {
           console.log('zarejestrowano xd')
         } else {
-          console.log('nie')
+          console.log('nie xd')
         }
       })
       .catch(e => {
