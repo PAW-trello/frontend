@@ -38,10 +38,24 @@ export default class Register extends Component {
       [name]: value
     });
     }
-    handleSubmit(event) {
-       
-      }
-
+  handleSubmit = () => {
+       console.log(this.state)
+      api
+        .register({
+          email: this.state.email, username: this.state.username, password: this.state.password, password_confirmation: this.state.password_confirmation
+        })
+        .then(({ok, data}) => {
+          if (ok) {
+           console.log('zarejestrowano')
+          } else {
+            console.log('wyjebalo sie cos')
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+  };
+  
   render() {
     return (
       <Container>
