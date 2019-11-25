@@ -8,12 +8,14 @@ const create = () => {
 
     const api = apisauce.create({
         baseURL,
-        headers: { 'Cache-Control': 'no-cache' },
+        headers: {
+            'Content-type': 'application/json'
+        },
         timeout: THIRTY_SECONDS_TIMEOUT,
     });
     const setAuthorizationHeader = (token: string) => api.setHeader('Authorization', `Bearer ${token}`)
     const logout = () => delete api.headers['Authorization']
-    const register = (registerPayload: RegisterPayload) =>  api.post(`signup`, registerPayload)
+    const register = (registerPayload: RegisterPayload) => api.post(`signup`, registerPayload)
      
     
     return {

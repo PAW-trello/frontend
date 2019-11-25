@@ -56,9 +56,7 @@ export const Login = () => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                     />
-                    {errors.email && touched.email && (
-                      <div className="input-feedback">{errors.email}</div>
-                    )}
+          
                     <label htmlFor="email" style={{ display: "block" }}>
                       Hasło
                     </label>
@@ -70,9 +68,7 @@ export const Login = () => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                     />
-                    {errors.password && touched.password && (
-                      <div className="input-feedback">{errors.password}</div>
-                    )}
+            
                     
                     <Button type="submit" onClick={handleSubmit}>
                       Zaloguj

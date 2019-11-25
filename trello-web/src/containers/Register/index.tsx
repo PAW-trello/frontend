@@ -45,6 +45,7 @@ export const Register = () => {
         if (ok) {
           console.log('zarejestrowano xd')
         } else {
+          console.log(data)
           console.log('nie xd')
         }
       })
@@ -58,7 +59,6 @@ export const Register = () => {
     <Container>
       <Row>
         <Col sm="12" md={{ size: 6, offset: 3 }}>
-          {" "}
           <Form>
             <Formik
               initialValues={initialValues}
@@ -74,7 +74,7 @@ export const Register = () => {
                 handleBlur
               }) => {
                 return (
-                  <form onSubmit={handleSubmit}>
+                  <>
                     <label htmlFor="email" style={{ display: "block" }}>
                       Nazwa użytkownika
                     </label>
@@ -139,7 +139,7 @@ export const Register = () => {
                     <Button type="submit" onClick={handleSubmit}>
                       Zarejestruj się
                     </Button>
-                  </form>
+                  </>
                 );
               }}
             </Formik>
