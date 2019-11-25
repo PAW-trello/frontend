@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Button,
   Form,
@@ -9,6 +9,7 @@ import {
 } from "reactstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import api from '../../utils/api';
 
 const initialValues = {
   email: '',
@@ -21,7 +22,18 @@ const validationSchema = Yup.object().shape({
 });
 export const Login = () => {
   const handleSubmit = ({ password, email }: typeof initialValues) => {
-    console.log(password + email);
+    api.login({ email, password }).then(({ok, data}) => {
+      if (ok) {
+        api.setAuthorizationHeader(data as string);
+        console.log(data);
+      } else {
+        console.log(data)
+        console.log('nie xd')
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    });
   };
 
   return (
@@ -44,7 +56,7 @@ export const Login = () => {
                 handleBlur
               }) => {
                 return (
-                  <form onSubmit={handleSubmit}>
+                  <>
                     <label htmlFor="email" style={{ display: "block" }}>
                       Email
                     </label>
@@ -68,12 +80,10 @@ export const Login = () => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                     />
-            
-                    
                     <Button type="submit" onClick={handleSubmit}>
                       Zaloguj
                     </Button>
-                  </form>
+                 </>
                 );
               }}
             </Formik>

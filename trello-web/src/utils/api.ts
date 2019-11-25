@@ -1,5 +1,5 @@
 import apisauce from 'apisauce'
-import RegisterPayload from '../typings'
+import { RegisterPayload, LoginPayload } from '../typings'
 
 const baseURL = "https://mighty-hollows-81695.herokuapp.com/"
 
@@ -16,12 +16,14 @@ const create = () => {
     const setAuthorizationHeader = (token: string) => api.setHeader('Authorization', `Bearer ${token}`)
     const logout = () => delete api.headers['Authorization']
     const register = (registerPayload: RegisterPayload) => api.post(`signup`, registerPayload)
+    const login = (loginPayload: LoginPayload) => api.post(`auth/login`, loginPayload)
      
     
     return {
         logout,
         setAuthorizationHeader,
-        register
+        register,
+        login
     }
 }
 const api = () => create()
