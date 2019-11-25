@@ -5,35 +5,40 @@ import {
   Input,
   Container,
   Row,
-  Col
+  Col,
+  Toast,
+  ToastBody,
+  ToastHeader
 } from "reactstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import api from '../../utils/api';
+import api from "../../utils/api";
 
 const initialValues = {
-  email: '',
-  password: ''
+  email: "",
+  password: ""
 };
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Zły email')
-    .required('Uzupełnij'),
+    .email("Zły email")
+    .required("Uzupełnij")
 });
 export const Login = () => {
   const handleSubmit = ({ password, email }: typeof initialValues) => {
-    api.login({ email, password }).then(({ok, data}) => {
-      if (ok) {
-        api.setAuthorizationHeader(data as string);
-        console.log(data);
-      } else {
-        console.log(data)
-        console.log('nie xd')
-      }
-    })
-    .catch(e => {
-      console.log(e);
-    });
+    api
+      .login({ email, password })
+      .then(({ ok, data }) => {
+        if (ok) {
+          api.setAuthorizationHeader(data as string);
+          console.log(data);
+        } else {
+          console.log(data);
+          console.log("nie xd");
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
 
   return (
@@ -68,7 +73,7 @@ export const Login = () => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                     />
-          
+
                     <label htmlFor="email" style={{ display: "block" }}>
                       Hasło
                     </label>
@@ -83,7 +88,7 @@ export const Login = () => {
                     <Button type="submit" onClick={handleSubmit}>
                       Zaloguj
                     </Button>
-                 </>
+                  </>
                 );
               }}
             </Formik>

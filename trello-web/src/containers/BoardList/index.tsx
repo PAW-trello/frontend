@@ -1,7 +1,7 @@
 import React from 'react';
 import SingleCard from "../../components/SingleCard";
 import { Container, Button } from 'reactstrap';
-
+import api from '../../utils/api'
 interface BoardListProps {
     id: number;
     addBoard: (roomName: string) => void;
@@ -17,6 +17,14 @@ class BoardList extends React.PureComponent<BoardListProps> {
 
     public addBoard = () => {
         const { boardName, boards } = this.state
+        api.addBoard({name: boardName})   .then(({ok, data}) => {
+            if ({ok, data}) {
+                console.log('added to backend')
+            } else {
+                console.log('problem with adding board')
+                console.log(data)
+            }
+          });
         const newboards = [...boards, { id: ++id, name: boardName }]
         this.setState({
             boardName: '',

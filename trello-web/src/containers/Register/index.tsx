@@ -43,10 +43,10 @@ export const Register = () => {
         password_confirmation
       }).then(({ok, data}) => {
         if (ok) {
-          console.log('zarejestrowano xd')
+          console.log('zarejestrowano ')
         } else {
           console.log(data)
-          console.log('nie xd')
+          console.log('błąd podczas rejestracji ')
         }
       })
       .catch(e => {
