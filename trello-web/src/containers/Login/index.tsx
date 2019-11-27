@@ -13,6 +13,9 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import api from "../../utils/api";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const initialValues = {
   email: "",
@@ -30,10 +33,11 @@ export const Login = () => {
       .then(({ ok, data }) => {
         if (ok) {
           api.setAuthorizationHeader(data as string);
+          toast.success("Zalogowano");
           console.log(data);
         } else {
           console.log(data);
-          console.log("nie xd");
+          toast.error("Błąd logowania");
         }
       })
       .catch(e => {
@@ -62,6 +66,7 @@ export const Login = () => {
               }) => {
                 return (
                   <>
+                    <ToastContainer/>
                     <label htmlFor="email" style={{ display: "block" }}>
                       Email
                     </label>

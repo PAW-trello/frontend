@@ -13,6 +13,9 @@ import {
 import api from "../../utils/api";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const initialValues = {
   email: "",
   username: "",
@@ -37,16 +40,18 @@ export const Register = () => {
     console.log(username + email + password + password_confirmation )
    api
       .register({
-        username,  
+        username,
         email,
         password,
         password_confirmation
       }).then(({ok, data}) => {
         if (ok) {
-          console.log('zarejestrowano ')
+          toast.success("Zarejestrowano");
         } else {
           console.log(data)
-          console.log('błąd podczas rejestracji ')
+          toast.error("Błąd podczas rejestracji", {
+            position: toast.POSITION.TOP_RIGHT
+          });
         }
       })
       .catch(e => {
@@ -75,12 +80,13 @@ export const Register = () => {
               }) => {
                 return (
                   <>
-                    <label htmlFor="email" style={{ display: "block" }}>
+                    <ToastContainer/>
+                    <label htmlFor="username" style={{ display: "block" }}>
                       Nazwa użytkownika
                     </label>
                     <Input
                       id="username"
-                      placeholder="Wpisz email"
+                      placeholder="Wpisz nazwę"
                       type="text"
                       value={username}
                       onBlur={handleBlur}
@@ -123,7 +129,7 @@ export const Register = () => {
                     </label>
                     <Input
                       id="password_confirmation"
-                      placeholder="Wpisz Hasło"
+                      placeholder="Potwierdź Hasło"
                       type="password"
                       value={password_confirmation}
                       onBlur={handleBlur}
