@@ -7,7 +7,7 @@ import {
   Nav,
   NavLink,
 } from "reactstrap";
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import SingleBoard from "../src/containers/SingleBoard";
 import { Login } from "../src/containers/Login";
 import { Register } from '../src/containers/Register'
@@ -17,11 +17,11 @@ const App: React.FC = () => {
     <Router>
       <div className="app">
         <Navbar color="light">
-          <NavbarBrand href="/">Trello clone</NavbarBrand>
+          <NavbarBrand tag={Link} to="/">Trello clone</NavbarBrand>
           <Nav>
-            <NavLink href="login">Zaloguj się</NavLink>
-            <NavLink href="/register">Zarejestruj się</NavLink>
-          </Nav>
+            <NavLink tag={Link} to="/login">Zaloguj się</NavLink>
+            <NavLink tag={Link} to="/register">Zarejestruj się</NavLink>
+          </Nav> 
         </Navbar>
 
         <Switch>

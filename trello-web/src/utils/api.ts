@@ -17,12 +17,12 @@ const create = () => {
     const logout = () => delete api.headers['Authorization']
     const register = (registerPayload: RegisterPayload) => api.post(`signup`, registerPayload)
     const login = (loginPayload: LoginPayload) => api.post(`auth/login`, loginPayload)
-    const addBoard = (addBoardPayload: AddBoardPayload) => api.post(`boards `, addBoardPayload)
+    const addBoard = (addBoardPayload: AddBoardPayload) => api.post(`boards`, addBoardPayload)
     const getBoards = () => api.get('/boards')
     const removeBoard = (removeBoard: RemoveBoard) => api.patch(`/boards/:id`,removeBoard)
 
-     
-    
+
+
     return {
         logout,
         setAuthorizationHeader,
@@ -30,7 +30,7 @@ const create = () => {
         login,
         addBoard,
         getBoards,
-        removeBoard
+        removeBoard,
     }
 }
 const api = () => create()

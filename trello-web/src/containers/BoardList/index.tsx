@@ -17,7 +17,7 @@ class BoardList extends React.PureComponent<BoardListProps> {
 
     public addBoard = () => {
         const { boardName, boards } = this.state
-        api.addBoard({name: boardName})   .then(({ok, data}) => {
+        api.addBoard({name: boardName}).then(({ok, data}) => {
             if ({ok, data}) {
                 console.log('added to backend')
             } else {

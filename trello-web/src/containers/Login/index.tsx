@@ -29,8 +29,8 @@ export const Login = () => {
       .login({ email, password })
       .then(({ ok, data }) => {
         if (ok) {
-          api.setAuthorizationHeader(data as string);
-          console.log(data);
+          // @ts-ignore
+          api.setAuthorizationHeader(data.auth_token as string);
         } else {
           console.log(data);
           console.log("nie xd");
