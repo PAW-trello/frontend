@@ -15,7 +15,7 @@ const SingleBoard = () =>  {
         if(id) {
             api.addNewLine(+id, title).then(({data}) => {
                 // @ts-ignore
-                const x = {...data, id: '' + data.id}
+                const x = {...data, id: '' + data.id, cards: []}
                 const newList  = [...lines, x]
                 setLines(newList)
             })
@@ -40,12 +40,19 @@ const SingleBoard = () =>  {
         }
     }
     
+    // const addCard = (card: any, lineId: any) => {
+    //     const x = {...lines}
+    //     const index = lines.findIndex(({id: listId}) => lineId === listId)
+    //     x[index].cards = [...x[index].cards, {title: card.title}]
+    //     console.log(x)
+    // }
+    
     useEffect(() => {
         if(id) {
             api.getBoardDetails(+id).then(({data}) => {
                 setBoardDetails(data as Board)
                 // @ts-ignores
-                const lines = data.lists.map(list => ({...list, id: '' + list.id}))
+                const lines = data.lists.map(list => ({...list, id: '' + list.id, cards: []}))
                 setLines(lines)
             })
         }
