@@ -35,7 +35,6 @@ export const Register = () => {
     password,
     password_confirmation
   }: typeof initialValues) => {
-    console.log(username + email + password + password_confirmation )
    api
       .register({
         username,
@@ -46,7 +45,6 @@ export const Register = () => {
         if (ok) {
           toast.success("Zarejestrowano");
         } else {
-          console.log(data)
           toast.error("Błąd podczas rejestracji", {
             position: toast.POSITION.TOP_RIGHT
           });

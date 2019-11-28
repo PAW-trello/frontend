@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 //@ts-ignore
-import Board from 'react-trello'
-// import api from '../../utils/api';
+import TrelloBoard from 'react-trello'
 import { useParams } from 'react-router';
+import api from '../../utils/api';
+import { Board } from '../../typings';
+import { Spinner } from 'reactstrap';
 
 const SingleBoard = () =>  {
-    const params = useParams()
+    const {id} = useParams()
+    const [boardDetails, setBoardDetails] = useState<Board | null>(null)
     // data = {
     //     lanes: [
     //         {
@@ -26,11 +29,18 @@ const SingleBoard = () =>  {
     //     ]
     // }
     useEffect(() => {
-        console.log(params)
+        if(id) {
+            api.getBoardDetails(+id).then(({data}) => {
+                setBoardDetails(data as Board)
+            })
+        }
     }, [])
-
+    if(boardDetails === null) return <Spinner/>
+    const {name} = boardDetails
     return <div>
-        Test
+        {boardDetails !== null && <div>
+            Nazwa boarda: {name}
+        </div>}
     </div>
 }
 

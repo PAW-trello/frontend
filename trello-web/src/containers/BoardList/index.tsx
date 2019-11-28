@@ -1,90 +1,76 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import SingleCard from "../../components/SingleCard";
 import { Container, Button, Row } from 'reactstrap';
 import api from '../../utils/api'
 import { Input, CenteredContainer, SingleCardContainer } from './styled';
 import { Board } from '../../typings';
-let id = 0  
+import { toast } from 'react-toastify';
 
-class BoardList extends React.PureComponent {
-    public state = {
-        boardName: '',
-        boards: []
-    };
+const BoardList = () => {
+    const [boardName, setBoardName] = useState('')
+    const [boards, setBoards] = useState<Board[]>([])
 
-    public addBoard = () => {
-        const { boardName, boards } = this.state
-        api.addBoard({name: boardName}).then(({ok, data}) => {
-            if ({ok, data}) {
-                console.log('added to backend')
-            } else {
-                console.log('problem with adding board')
-                console.log(data)
-            }
-          });
-        const newboards = [...boards, { id: ++id, name: boardName }]
-        this.setState({
-            boardName: '',
-            boards: newboards
-        });
+    const addBoard = () => {
+            api.addBoard({name: boardName}).then(({ok, data}) => {
+                if ({ok, data}) {
+                    boards.push(data as Board)
+                    setBoards(boards)
+                    setBoardName('')
+                } else {
+                    toast.error("Nie dodano tablicy")
+                }
+            });
     }
 
-    public updateRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const boardName = e.target.value;
-        this.setState({
-            boardName,
-        });
+    const updateRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBoardName(e.target.value)
     }
 
-    public removeBoard = (removeId: number): void => {
+    const removeBoard = (removeId: number): void => {
         api.removeBoard(removeId).then(({ok}) =>{
             if(ok) {
-                const { boards } = this.state
                 const newBoards = boards.filter(({ id }) => id !== removeId)
-                this.setState({boards: newBoards})
+                setBoards(newBoards)
             }
         })
     }
     
-    renderSingleBoard = ({ id, name }: Board) => <SingleCardContainer sm="4">
+    const renderSingleBoard = ({ id, name }: Board) => <SingleCardContainer key={id} sm="4">
         <SingleCard
-            key={id}
             name={name}
             id={id}
-            removeBoard={this.removeBoard}
+            removeBoard={removeBoard}
         />
     </SingleCardContainer>
     
-    componentDidMount = () => {
+    useEffect(() => {
         api.getBoards().then(({data, ok}) =>{
-            if(ok) {
-                this.setState({boards: data})
+            if(ok) { 
+                setBoards(data as Board[])
             }
         })
-    }
+    }, [])
 
-    public render() {
-        console.log(this.props)
-        const {boardName, boards } = this.state
-        return (
+
+    return (
             <div className='app'>
                 <CenteredContainer>
                     <br />
                     <Input type='text'
                         value={boardName}
-                        onChange={this.updateRoomName}
+                        onChange={updateRoomName}
                         placeholder="Nowa tablica"
                     />
-                    <Button onClick={this.addBoard}>Dodaj tablicę</Button>
+                    <Button disabled={boardName.length === 0} onClick={addBoard}>Dodaj tablicę</Button>
                 </CenteredContainer>
                 <Container>
                     <Row>
-                        {boards.map(this.renderSingleBoard)}
+                        {boards.map(renderSingleBoard)}
                     </Row>
                 </Container>
             </div>
-        );
-    }
+    )
+    
 }
 
 export default BoardList;

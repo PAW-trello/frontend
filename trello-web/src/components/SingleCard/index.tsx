@@ -1,100 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, Button, Spinner } from 'reactstrap';
-import { SpinnerContainer } from './styled';
+import { SpinnerContainer, CenterContainer } from './styled';
 import api from '../../utils/api';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 interface SingleCardProps {
     id: number;
     name: string;
     removeBoard: (id: number) => void;
 }
 
-class SingleCard extends React.PureComponent<SingleCardProps> {
-    state={
-        newName: this.props.name,
-        inputOpened: false,
-        loadingState: false,
-    }
-    componentDidUpdate = (_: SingleCardProps, prevState: any) => {
-        const {inputOpened} = this.state
-        const {inputOpened: wasOpened} = prevState
-        if(inputOpened && !wasOpened) {
-            console.log('add')
+const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
+    const [newName, setNewName] = useState(name)
+    const [inputOpened, setInputOpened] = useState(false)
+    const [loadingState, setLoadingState] = useState(false)
+
+    useEffect(() => {
+        if(inputOpened) {
             setTimeout(() => {
-                window.addEventListener('click',this.clickListener)
+                window.addEventListener('click', clickListener)
             }, 0);
+        } else {
+            window.removeEventListener('click', clickListener)
         }
-        if(wasOpened && !inputOpened) {
-            window.removeEventListener('click', this.clickListener)
+    }, [inputOpened])
+
+
+    const clickListener = (e: MouseEvent) => {
+        //@ts-ignore
+        if(inputOpened && e.target && e.target.id !== 'edit-name') {
+            editCard()
         }
     }
 
-    clickListener = (e: any) => {
-        if(this.state.inputOpened && e.target.id !== 'edit-name') {
-            this.editCard()
-        }
+    const deleteCard = () => {
+        removeBoard(id);
     }
-
-    public deleteCard = () => {
-        this.props.removeBoard(this.props.id);
-        console.log("deleted");
-    }
-    public editCard = () => {
-        const {id, name} = this.props;
-        const {newName} = this.state
-        this.setState({
-            loadingState: true,
-            inputOpened: false
-        })
+    
+    const editCard = () => {
+        setLoadingState(true)
+        setInputOpened(false)
         api.updateBoard(newName, id).then(({ok}) => {
             if(ok) {
-                this.setState({
-                    loadingState: false
-                })
+                setLoadingState(true)
             } else {
                 toast.error('Nie udało się zaktualizować boarda')
-                this.setState({
-                    newName: name
-                })  
+                setNewName(name)
             }
         })
 
-        console.log(id,newName);
     }
-    showInput = () => this.setState({inputOpened: true})
+    const showInput = () => setInputOpened(true)
 
-    changeName=(e: any) => {
-        this.setState({newName: e.target.value})
+    const changeName=(e:  React.ChangeEvent<HTMLInputElement>) => {
+        setNewName(e.target.value)
     }
 
-    keyDownHandler = (e: any) => {
+    const keyDownHandler = (e:  React.KeyboardEvent) => {
         if (e.key === 'Enter') {
-            this.editCard()
+            editCard()
             return
         }
     }
 
-    public render() {
-        const { id } = this.props
-        const {inputOpened, newName, loadingState} = this.state
-        return (
-                <Card>
-                    <CardBody>
-                        {loadingState && <SpinnerContainer>
-                            <Spinner />
-                            </SpinnerContainer>
-                        }
-                        {!loadingState && <>
-                            {!inputOpened && <CardTitle onClick={this.showInput}>{newName}</CardTitle>}
-                            {inputOpened && <input id={'edit-name'} value={newName} onChange={this.changeName} onKeyDown={this.keyDownHandler}/> }
-                            <br/>
-                            <Button onClick={this.deleteCard}>Usuń</Button>
-                            <Button href={`/board/${id}`}>Otwórz</Button>
-                        </>}
-                    </CardBody>
-                </Card>
-        );
-    }
+    return (
+            <Card>
+                <CardBody>
+                    {loadingState && <SpinnerContainer>
+                        <Spinner />
+                        </SpinnerContainer>
+                    }
+                    {!loadingState && <>
+                        {!inputOpened && <CardTitle onClick={showInput}>{newName}</CardTitle>}
+                        {inputOpened && <input id={'edit-name'} value={newName} onChange={changeName} onKeyDown={keyDownHandler}/> }
+                        <br/>
+                        <CenterContainer>
+                            <Button tag={Link} to={`/board/${id}`}>Otwórz</Button>
+                            <Button onClick={deleteCard}>Usuń</Button>
+                        </CenterContainer>
+                    </>}
+                </CardBody>
+            </Card>
+    );
+    
 }
 
 export default SingleCard;

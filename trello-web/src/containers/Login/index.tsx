@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Button,
   Form,
@@ -26,7 +26,9 @@ const validationSchema = Yup.object().shape({
 });
 export const Login = () => {
   const history = useHistory()
+  const [loading, setLoading] = useState(false)
   const handleSubmit = ({ password, email }: typeof initialValues) => {
+    setLoading(true)
     api
       .login({ email, password })
       .then(({ ok, data }) => {
@@ -36,6 +38,7 @@ export const Login = () => {
           toast.success("Zalogowano");
           history.push('/')
         } else {
+          setLoading(false)
           toast.error("Błąd logowania");
         }
       })
@@ -84,7 +87,7 @@ export const Login = () => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                     />
-                    <Button type="submit" onClick={handleSubmit}>
+                    <Button type="submit" onClick={handleSubmit} disabled={loading}>
                       Zaloguj
                     </Button>
                   </>
