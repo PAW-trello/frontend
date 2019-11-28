@@ -9,6 +9,7 @@ export interface RegisterPayload extends LoginPayload {
 export interface AddBoardPayload {
     name: string;
 }
-export interface RemoveBoard extends AddBoardPayload {
-    id:string
+
+export interface Board extends AddBoardPayload {
+    id: number;
 }

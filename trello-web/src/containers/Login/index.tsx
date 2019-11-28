@@ -6,16 +6,13 @@ import {
   Container,
   Row,
   Col,
-  Toast,
-  ToastBody,
-  ToastHeader
 } from "reactstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import api from "../../utils/api";
-import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from "react-toastify";
 
+import {useHistory} from 'react-router-dom'
 
 const initialValues = {
   email: "",
@@ -24,9 +21,11 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Zły email")
-    .required("Uzupełnij")
+    .required("Uzupełnij email"),
+    password: Yup.string().required("Uzupełnij hasło")
 });
 export const Login = () => {
+  const history = useHistory()
   const handleSubmit = ({ password, email }: typeof initialValues) => {
     api
       .login({ email, password })
@@ -35,6 +34,7 @@ export const Login = () => {
           // @ts-ignore
           api.setAuthorizationHeader(data.auth_token as string);
           toast.success("Zalogowano");
+          history.push('/')
         } else {
           toast.error("Błąd logowania");
         }
@@ -61,7 +61,6 @@ export const Login = () => {
               }) => {
                 return (
                   <>
-                    <ToastContainer/>
                     <label htmlFor="email" style={{ display: "block" }}>
                       Email
                     </label>

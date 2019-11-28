@@ -1,5 +1,5 @@
 import apisauce from 'apisauce'
-import { RegisterPayload, LoginPayload,AddBoardPayload, RemoveBoard } from '../typings'
+import { RegisterPayload, LoginPayload,AddBoardPayload } from '../typings'
 
 const baseURL = "https://mighty-hollows-81695.herokuapp.com/"
 
@@ -19,8 +19,10 @@ const create = () => {
     const login = (loginPayload: LoginPayload) => api.post(`auth/login`, loginPayload)
     const addBoard = (addBoardPayload: AddBoardPayload) => api.post(`boards`, addBoardPayload)
     const getBoards = () => api.get('/boards')
-    const removeBoard = (removeBoard: RemoveBoard) => api.patch(`/boards/:id`,removeBoard)
-
+    const removeBoard = (boardId: number) => api.delete(`/boards/${boardId}`)
+    const updateBoard = (name: string, boardId: number) => api.put(`/boards/${boardId}`, {name})
+    const headers = () => api.headers.Authorization
+    const getBoardDetails = (boardId: number) => api.get(`/boards/${boardId}`)
 
 
     return {
@@ -31,6 +33,9 @@ const create = () => {
         addBoard,
         getBoards,
         removeBoard,
+        updateBoard,
+        headers,
+        getBoardDetails
     }
 }
 const api = () => create()

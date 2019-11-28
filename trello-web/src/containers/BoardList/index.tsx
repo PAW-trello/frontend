@@ -1,15 +1,12 @@
 import React from 'react';
 import SingleCard from "../../components/SingleCard";
-import { Container, Button } from 'reactstrap';
+import { Container, Button, Row } from 'reactstrap';
 import api from '../../utils/api'
-interface BoardListProps {
-    id: number;
-    addBoard: (roomName: string) => void;
-}
+import { Input, CenteredContainer, SingleCardContainer } from './styled';
+import { Board } from '../../typings';
+let id = 0  
 
-let id = 0
-
-class BoardList extends React.PureComponent<BoardListProps> {
+class BoardList extends React.PureComponent {
     public state = {
         boardName: '',
         boards: []
@@ -40,47 +37,50 @@ class BoardList extends React.PureComponent<BoardListProps> {
     }
 
     public removeBoard = (removeId: number): void => {
-        const { boards } = this.state
-        const newBoards = boards.filter(({ id }) => id !== removeId)
-        this.setState({boards: newBoards})
+        api.removeBoard(removeId).then(({ok}) =>{
+            if(ok) {
+                const { boards } = this.state
+                const newBoards = boards.filter(({ id }) => id !== removeId)
+                this.setState({boards: newBoards})
+            }
+        })
     }
-
-    public editName = (editId: number, newName: string): void => {
-        const { boards } = this.state
-        const boardEdit = boards.find(({ id }) => id === editId)
-        if (boardEdit !== undefined) {
-            // @ts-ignore
-           boardEdit.name =  newName
-        } 
-        // const newBoards = boards.filter(({ id }) => id !== removeId)
-        // this.setState({boards: newBoards})
-    }
-
-    renderSingleBoard = ({ id, name }) => <SingleCard
+    
+    renderSingleBoard = ({ id, name }: Board) => <SingleCardContainer sm="4">
+        <SingleCard
             key={id}
             name={name}
             id={id}
             removeBoard={this.removeBoard}
         />
+    </SingleCardContainer>
     
+    componentDidMount = () => {
+        api.getBoards().then(({data, ok}) =>{
+            if(ok) {
+                this.setState({boards: data})
+            }
+        })
+    }
 
     public render() {
+        console.log(this.props)
         const {boardName, boards } = this.state
         return (
             <div className='app'>
-                <div>
-                    {this.state.boardName}
+                <CenteredContainer>
                     <br />
-                    <input type='text'
+                    <Input type='text'
                         value={boardName}
                         onChange={this.updateRoomName}
-                        placeholder="Nazwa tablicy"
+                        placeholder="Nowa tablica"
                     />
-                    <Button style={{margin: 5}} onClick={this.addBoard}>Dodaj tablicę</Button>
-                </div>
+                    <Button onClick={this.addBoard}>Dodaj tablicę</Button>
+                </CenteredContainer>
                 <Container>
-                    {boards.map(this.renderSingleBoard)}
-
+                    <Row>
+                        {boards.map(this.renderSingleBoard)}
+                    </Row>
                 </Container>
             </div>
         );
