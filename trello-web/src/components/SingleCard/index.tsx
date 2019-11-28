@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardBody, CardTitle, Button, Spinner } from 'reactstrap';
-import { SpinnerContainer, CenterContainer } from './styled';
-import api from '../../utils/api';
-import { toast } from 'react-toastify';
+import { SpinnerContainer, IconStyled } from './styled';
+// import api from '../../utils/api';
+// import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { Card, Button, Loader } from 'semantic-ui-react';
 interface SingleCardProps {
     id: number;
     name: string;
@@ -17,10 +17,10 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
 
     useEffect(() => {
         if(inputOpened) {
-            setTimeout(() => {
+            console.log('add')
                 window.addEventListener('click', clickListener)
-            }, 0);
         } else {
+            console.log('remove')
             window.removeEventListener('click', clickListener)
         }
     }, [inputOpened])
@@ -29,6 +29,7 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
     const clickListener = (e: MouseEvent) => {
         //@ts-ignore
         if(inputOpened && e.target && e.target.id !== 'edit-name') {
+            console.log("Xs")
             editCard()
         }
     }
@@ -38,17 +39,19 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
     }
     
     const editCard = () => {
-        setLoadingState(true)
-        setInputOpened(false)
-        api.updateBoard(newName, id).then(({ok}) => {
-            if(ok) {
-                setLoadingState(true)
-            } else {
-                toast.error('Nie udało się zaktualizować boarda')
-                setNewName(name)
-            }
-        })
-
+        if(inputOpened) {
+            setLoadingState(true)
+            setInputOpened(false)
+            // api.updateBoard(newName, id).then(({ok}) => {
+            //     if(ok) {
+            //         setLoadingState(true)
+            //     } else {
+            //         toast.error('Nie udało się zaktualizować boarda')
+            //         setNewName(name)
+            //     }
+            // })
+            console.log('edytujre')
+        }
     }
     const showInput = () => setInputOpened(true)
 
@@ -64,23 +67,32 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
     }
 
     return (
-            <Card>
-                <CardBody>
-                    {loadingState && <SpinnerContainer>
-                        <Spinner />
-                        </SpinnerContainer>
-                    }
-                    {!loadingState && <>
-                        {!inputOpened && <CardTitle onClick={showInput}>{newName}</CardTitle>}
-                        {inputOpened && <input id={'edit-name'} value={newName} onChange={changeName} onKeyDown={keyDownHandler}/> }
-                        <br/>
-                        <CenterContainer>
-                            <Button tag={Link} to={`/board/${id}`}>Otwórz</Button>
-                            <Button onClick={deleteCard}>Usuń</Button>
-                        </CenterContainer>
-                    </>}
-                </CardBody>
-            </Card>
+        <Card>
+            {loadingState && <SpinnerContainer>
+                <Loader active />
+            </SpinnerContainer>}
+            {!loadingState && <>
+                <Card.Content>
+                    <IconStyled
+                        color="red"
+                        name="cancel"
+                        onClick={deleteCard}
+                    />
+                    <Card.Header>
+                        {!inputOpened && <div onClick={showInput}>{newName}</div>}
+                        {inputOpened && <input id='edit-name' value={newName} onChange={changeName} onKeyDown={keyDownHandler}/> }
+                    </Card.Header>
+                    <br/>
+                </Card.Content>
+                <Card.Content extra>
+                    <Link to={`/board/${id}`} className='ui one buttons'>
+                        <Button basic color='green'>
+                            Otwórz
+                        </Button>
+                    </Link>
+                </Card.Content>
+            </>}
+        </Card>
     );
     
 }

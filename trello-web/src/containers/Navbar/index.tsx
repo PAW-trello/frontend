@@ -1,13 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Navbar, NavbarBrand, Nav } from 'reactstrap'
+import { Menu } from 'semantic-ui-react'
 
 const MyNavbar: React.FunctionComponent = ({children}) =>(
-  <Navbar color="light">
-    <NavbarBrand tag={Link} to="/">Trello clone</NavbarBrand>
-    <Nav>
+  <Menu stackable>
+    <Menu.Item>
+      <Link to='/'>Trello clone</Link>
+    </Menu.Item>
+    <Menu.Menu position='right'>
       {children}
-    </Nav> 
-  </Navbar>
+    </Menu.Menu>
+  </Menu>
 )
 export default MyNavbar

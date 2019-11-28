@@ -1,18 +1,11 @@
 import React from "react";
-import {
-  Button,
-  Form,
-  Input,  
-  Container,
-  Row,
-  Col
-} from "reactstrap";
 
 import api from "../../utils/api";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import {toast, ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
+import { Grid, Form, Button } from 'semantic-ui-react';
+import { useHistory } from 'react-router';
 
 const initialValues = {
   email: "",
@@ -29,6 +22,7 @@ const validationSchema = Yup.object().shape({
     .required("Uzupełnij email")
 });
 export const Register = () => {
+  const history = useHistory()
   const handleSubmit = ({
     username,
     email,
@@ -44,6 +38,7 @@ export const Register = () => {
       }).then(({ok, data}) => {
         if (ok) {
           toast.success("Zarejestrowano");
+          history.push('/login')
         } else {
           toast.error("Błąd podczas rejestracji", {
             position: toast.POSITION.TOP_RIGHT
@@ -57,9 +52,9 @@ export const Register = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col sm="12" md={{ size: 6, offset: 3 }}>
+    <Grid centered  >
+      <Grid.Row>
+        <Grid.Column mobile={16} computer={4}>
           <Form>
             <Formik
               initialValues={initialValues}
@@ -71,83 +66,66 @@ export const Register = () => {
                 errors,
                 touched,
                 handleSubmit,
-                handleChange,
-                handleBlur
+                setFieldValue,
+                setFieldTouched
               }) => {
                 return (
                   <>
-                    <ToastContainer/>
-                    <label htmlFor="username" style={{ display: "block" }}>
-                      Nazwa użytkownika
-                    </label>
-                    <Input
-                      id="username"
-                      placeholder="Wpisz nazwę"
-                      type="text"
-                      value={username}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
+                  <Form.Field>
+                    <label>Nazwa uzytkownika</label>
+                    <Form.Input 
+                      fluid
+                      placeholder='Nazwa uzytkownika' 
+                      value={username} 
+                      onChange={(e) => setFieldValue('username', e.target.value)}
+                      error={touched.username && errors.username && errors.username}
+                      onBlur={() => setFieldTouched('username', true)}
                     />
-                    {errors.username && touched.username && (
-                      <div className="input-feedback">{errors.username}</div>
-                    )}
-                    <label htmlFor="email" style={{ display: "block" }}>
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      placeholder="Wpisz email"
-                      type="text"
-                      value={email}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
+                  </Form.Field>
+                  <Form.Field>
+                    <label>E-mail</label>
+                    <Form.Input 
+                      fluid
+                      placeholder='E-mail' 
+                      value={email} 
+                      onChange={(e) => setFieldValue('email', e.target.value)}
+                      error={touched.email && errors.email && errors.email}
+                      onBlur={() => setFieldTouched('email', true)}
                     />
-                    {errors.email && touched.email && (
-                      <div className="input-feedback">{errors.email}</div>
-                    )}
-                    <label htmlFor="email" style={{ display: "block" }}>
-                      Hasło
-                    </label>
-                    <Input
-                      id="password"
-                      placeholder="Wpisz Hasło"
-                      type="password"
-                      value={password}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
+                  </Form.Field>
+                  <Form.Field>
+                    <label>Password</label>
+                    <Form.Input
+                      type='password'
+                      placeholder='Password'
+                      value={password} 
+                      onChange={(e) => setFieldValue('password', e.target.value)}
+                      error={touched.password && errors.password && errors.password}
+                      onBlur={() => setFieldTouched('password', true)}
                     />
-                    {errors.password && touched.password && (
-                      <div className="input-feedback">{errors.password}</div>
-                    )}
-
-                    <label htmlFor="email" style={{ display: "block" }}>
-                      Potwierdzenie hasła
-                    </label>
-                    <Input
-                      id="password_confirmation"
-                      placeholder="Potwierdź Hasło"
-                      type="password"
-                      value={password_confirmation}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
+                  </Form.Field>
+                  <Form.Field>
+                    <label>Password</label>
+                    <Form.Input
+                      type='password'
+                      placeholder='Potwierdź hasło'
+                      value={password_confirmation} 
+                      onChange={(e) => setFieldValue('password_confirmation', e.target.value)}
+                      error={touched.password_confirmation && errors.password_confirmation && errors.password_confirmation}
+                      onBlur={() => setFieldTouched('password_confirmation', true)}
                     />
-                    {errors.password_confirmation &&
-                      touched.password_confirmation && (
-                        <div className="input-feedback">
-                          {errors.password_confirmation}
-                        </div>
-                      )}
-
-                    <Button type="submit" onClick={handleSubmit}>
-                      Zarejestruj się
-                    </Button>
-                  </>
+                  </Form.Field>
+                  <br/>
+                  <Button onClick={() => handleSubmit()} type="submit">
+                    Zarejetruj
+                  </Button>
+                </>
                 );
               }}
             </Formik>
           </Form>
-        </Col>
-      </Row>
-    </Container>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };

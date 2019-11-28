@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {ToastContainer} from "react-toastify";
 import 'semantic-ui-css/semantic.min.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
 <>

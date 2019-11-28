@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import SingleCard from "../../components/SingleCard";
-import { Container, Button, Row } from 'reactstrap';
 import api from '../../utils/api'
-import { Input, CenteredContainer, SingleCardContainer } from './styled';
+import { CenteredContainer, InputStyled } from './styled';
 import { Board } from '../../typings';
 import { toast } from 'react-toastify';
+import { Button, Grid, Card } from 'semantic-ui-react';
 
 const BoardList = () => {
     const [boardName, setBoardName] = useState('')
@@ -35,13 +35,13 @@ const BoardList = () => {
         })
     }
     
-    const renderSingleBoard = ({ id, name }: Board) => <SingleCardContainer key={id} sm="4">
+    const renderSingleBoard = ({ id, name }: Board) => 
         <SingleCard
+            key={id}
             name={name}
             id={id}
             removeBoard={removeBoard}
         />
-    </SingleCardContainer>
     
     useEffect(() => {
         api.getBoards().then(({data, ok}) =>{
@@ -56,18 +56,22 @@ const BoardList = () => {
             <div className='app'>
                 <CenteredContainer>
                     <br />
-                    <Input type='text'
+                    <InputStyled type='text'
                         value={boardName}
                         onChange={updateRoomName}
                         placeholder="Nowa tablica"
                     />
                     <Button disabled={boardName.length === 0} onClick={addBoard}>Dodaj tablicę</Button>
                 </CenteredContainer>
-                <Container>
-                    <Row>
-                        {boards.map(renderSingleBoard)}
-                    </Row>
-                </Container>
+                <Grid centered>
+                    <Grid.Row>
+                        <Grid.Column computer={9} >
+                            <Card.Group>
+                                {boards.map(renderSingleBoard)}
+                            </Card.Group>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
             </div>
     )
     

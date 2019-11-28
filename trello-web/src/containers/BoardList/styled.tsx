@@ -1,17 +1,13 @@
 import styled from 'styled-components'
-import { Col } from 'reactstrap'
+import { Input } from 'semantic-ui-react'
 
-export const Input = styled.input`
+export const InputStyled = styled(Input)`
   margin-right: 5px;
 `
 
 export const CenteredContainer = styled.div`
-  margin-top: 10px;
+  margin: 10px;
   display: flex;
   justify-content: center;
   vertical-align: center; 
-`
-
-export const SingleCardContainer = styled(Col)`
-  margin-top: 10px;
 `

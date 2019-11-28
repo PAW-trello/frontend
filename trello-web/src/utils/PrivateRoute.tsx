@@ -1,18 +1,14 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Route, Redirect, Link, useHistory} from 'react-router-dom'
 import api from './api'
-import { NavLink } from 'reactstrap'
 import MyNavbar from '../containers/Navbar'
 import { toast } from 'react-toastify'
+import { Menu } from 'semantic-ui-react'
 const PrivateRoute =  ({ children, ...rest }: any) => {
   const history = useHistory()
   const isValid = !!api.headers()
 
-  useEffect(() => {
-    if(!isValid){
-      toast.error('Nie masz dostępu do strony zaloguj się')
-    }
-  }, [])
+  console.log("test")
 
   const logout = () => {
     api.logout()
@@ -26,7 +22,9 @@ const PrivateRoute =  ({ children, ...rest }: any) => {
           isValid? (
           <>
             <MyNavbar>
-              <NavLink tag={Link} to="#" onClick={logout}> Wyloguj się </NavLink>
+              <Menu.Item>
+                <Link to="#" onClick={logout}>Wyloguj się</Link>
+              </Menu.Item>
             </MyNavbar>
             {children}
           </>

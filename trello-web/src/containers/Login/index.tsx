@@ -1,18 +1,11 @@
 import React, {useState} from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import api from "../../utils/api";
 import {toast} from "react-toastify";
 
 import {useHistory} from 'react-router-dom'
+import { Form, Grid, Button } from 'semantic-ui-react';
 
 const initialValues = {
   email: "",
@@ -45,9 +38,9 @@ export const Login = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col sm="12" md={{ size: 6, offset: 3 }}>
+    <Grid centered  >
+      <Grid.Row>
+        <Grid.Column mobile={16} computer={4}>
           <Form>
             <Formik
               initialValues={initialValues}
@@ -59,35 +52,35 @@ export const Login = () => {
                 errors,
                 touched,
                 handleSubmit,
-                handleChange,
-                handleBlur
+                setFieldValue,
+                setFieldTouched,
               }) => {
                 return (
                   <>
-                    <label htmlFor="email" style={{ display: "block" }}>
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      placeholder="Wpisz email"
-                      type="text"
-                      value={email}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                    />
-
-                    <label htmlFor="email" style={{ display: "block" }}>
-                      Hasło
-                    </label>
-                    <Input
-                      id="password"
-                      placeholder="Wpisz Hasło"
-                      type="password"
-                      value={password}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                    />
-                    <Button type="submit" onClick={handleSubmit} disabled={loading}>
+                    <Form.Field>
+                      <label>E-mail</label>
+                      <Form.Input 
+                        fluid
+                        placeholder='E-mail' 
+                        value={email} 
+                        onChange={(e) => setFieldValue('email', e.target.value)}
+                        error={touched.email && errors.email && errors.email}
+                        onBlur={() => setFieldTouched('email', true)}
+                      />
+                    </Form.Field>
+                    <Form.Field>
+                      <label>Password</label>
+                      <Form.Input
+                        type='password'
+                        placeholder='Password'
+                        value={password} 
+                        onChange={(e) => setFieldValue('password', e.target.value)}
+                        error={touched.password && errors.password && errors.password}
+                        onBlur={() => setFieldTouched('password', true)}
+                      />
+                    </Form.Field>
+                    <br/>
+                    <Button onClick={() => handleSubmit()} type="submit" disabled={loading}>
                       Zaloguj
                     </Button>
                   </>
@@ -95,8 +88,8 @@ export const Login = () => {
               }}
             </Formik>
           </Form>
-        </Col>
-      </Row>
-    </Container>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };
