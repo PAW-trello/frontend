@@ -23,6 +23,10 @@ const create = () => {
     const updateBoard = (name: string, boardId: number) => api.put(`/boards/${boardId}`, {name})
     const headers = () => api.headers.Authorization
     const getBoardDetails = (boardId: number) => api.get(`/boards/${boardId}`)
+    const addNewLine = (boardId: number, listName: string) => api.post(`/boards/${boardId}/lists`, {title: listName})
+    const removeLine = (boardId: number,lineId: number) => api.delete(`/boards/${boardId}/lists/${lineId}`)
+    const editLine = (boardId: number,lineId: number, newName: string) => api.put(`/boards/${boardId}/lists/${lineId}`, {title: newName})
+
 
 
     return {
@@ -35,7 +39,10 @@ const create = () => {
         removeBoard,
         updateBoard,
         headers,
-        getBoardDetails
+        getBoardDetails,
+        addNewLine,
+        removeLine,
+        editLine
     }
 }
 const api = () => create()
