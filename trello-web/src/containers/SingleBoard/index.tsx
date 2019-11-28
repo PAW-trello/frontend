@@ -1,9 +1,15 @@
-import React from 'react';
-import Board from 'react-trello'
+import React, { useEffect, useState } from 'react';
+//@ts-ignore
+import TrelloBoard from 'react-trello'
+import { useParams } from 'react-router';
+import api from '../../utils/api';
+import { Board } from '../../typings';
+import { Loader } from 'semantic-ui-react';
 
-class SingleBoard extends React.Component {
-
-    data = {
+const SingleBoard = () =>  {
+    const {id} = useParams()
+    const [boardDetails, setBoardDetails] = useState<Board | null>(null)
+    const data = {
         lanes: [
             {
                 id: 'lane1',
@@ -22,10 +28,21 @@ class SingleBoard extends React.Component {
             }
         ]
     }
-
-    render() {
-        return <Board data={this.data} />
-    }
+    useEffect(() => {
+        if(id) {
+            api.getBoardDetails(+id).then(({data}) => {
+                setBoardDetails(data as Board)
+            })
+        }
+    }, [])
+    if(boardDetails === null) return <Loader active/>
+    const {name} = boardDetails
+    return <div>
+        {name && <div>
+            Nazwa boarda: {name}
+            <TrelloBoard data={data} canAddLanes editable editLaneTitle/>
+        </div>}
+    </div>
 }
 
 export default SingleBoard;

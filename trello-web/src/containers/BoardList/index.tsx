@@ -1,89 +1,80 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import SingleCard from "../../components/SingleCard";
-import {
-    Navbar,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-} from 'reactstrap';
-import { Container, Row, Card, CardBody, CardTitle, Button, Col } from 'reactstrap';
+import api from '../../utils/api'
+import { CenteredContainer, InputStyled } from './styled';
+import { Board } from '../../typings';
+import { toast } from 'react-toastify';
+import { Button, Grid, Card } from 'semantic-ui-react';
 
-interface BoardListProps {
-    id: number;
-    addBoard: (roomName: string) => void;
-}
+const BoardList = () => {
+    const [boardName, setBoardName] = useState('')
+    const [boards, setBoards] = useState<Board[]>([])
 
-let id = 0
-
-class BoardList extends React.PureComponent<BoardListProps> {
-    public state = {
-        boardName: '',
-        boards: []
-    };
-
-    public addBoard = () => {
-        const { boardName, boards } = this.state
-        const newboards = [...boards, { id: ++id, name: boardName }]
-        this.setState({
-            boardName: '',
-            boards: newboards
-        });
+    const addBoard = () => {
+            api.addBoard({name: boardName}).then(({ok, data}) => {
+                if ({ok, data}) {
+                    boards.push(data as Board)
+                    setBoards(boards)
+                    setBoardName('')
+                } else {
+                    toast.error("Nie dodano tablicy")
+                }
+            });
     }
 
-    public updateRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const boardName = e.target.value;
-        this.setState({
-            boardName,
-        });
+    const updateRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBoardName(e.target.value)
     }
 
-    public removeBoard = (removeId: number): void => {
-        const { boards } = this.state
-        const newBoards = boards.filter(({ id }) => id !== removeId)
-        this.setState({boards: newBoards})
+    const removeBoard = (removeId: number): void => {
+        api.removeBoard(removeId).then(({ok}) =>{
+            if(ok) {
+                const newBoards = boards.filter(({ id }) => id !== removeId)
+                setBoards(newBoards)
+            }
+        })
     }
-
-    public editName = (editId: number, newName: string): void => {
-        const { boards } = this.state
-        const boardEdit = boards.find(({ id }) => id === editId)
-        if (boardEdit !== undefined) {
-            // @ts-ignore
-           boardEdit.name =  newName
-        } 
-        // const newBoards = boards.filter(({ id }) => id !== removeId)
-        // this.setState({boards: newBoards})
-    }
-
-    renderSingleBoard = ({ id, name }) => <SingleCard
+    
+    const renderSingleBoard = ({ id, name }: Board) => 
+        <SingleCard
             key={id}
             name={name}
             id={id}
-            removeBoard={this.removeBoard}
+            removeBoard={removeBoard}
         />
     
+    useEffect(() => {
+        api.getBoards().then(({data, ok}) =>{
+            if(ok) { 
+                setBoards(data as Board[])
+            }
+        })
+    }, [])
 
-    public render() {
-        const {boardName, boards } = this.state
-        return (
+
+    return (
             <div className='app'>
-                <div>
-                    {this.state.boardName}
+                <CenteredContainer>
                     <br />
-                    <input type='text'
+                    <InputStyled type='text'
                         value={boardName}
-                        onChange={this.updateRoomName}
-                        placeholder="Nazwa tablicy"
+                        onChange={updateRoomName}
+                        placeholder="Nowa tablica"
                     />
-                    <Button style={{margin: 5}} onClick={this.addBoard}>Dodaj tablicę</Button>
-                </div>
-                <Container>
-                    {boards.map(this.renderSingleBoard)}
-
-                </Container>
+                    <Button disabled={boardName.length === 0} onClick={addBoard}>Dodaj tablicę</Button>
+                </CenteredContainer>
+                <Grid centered>
+                    <Grid.Row>
+                        <Grid.Column computer={9} >
+                            <Card.Group>
+                                {boards.map(renderSingleBoard)}
+                            </Card.Group>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
             </div>
-        );
-    }
+    )
+    
 }
 
 export default BoardList;
