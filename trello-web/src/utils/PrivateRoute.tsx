@@ -7,9 +7,7 @@ import { Menu } from 'semantic-ui-react'
 const PrivateRoute =  ({ children, ...rest }: any) => {
   const history = useHistory()
   const isValid = !!api.headers()
-
-  console.log("test")
-
+  
   const logout = () => {
     api.logout()
     toast.success("Wylogowano")

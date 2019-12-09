@@ -36,7 +36,6 @@ const SingleBoard = () =>  {
             const x = {...lines}
             const index = lines.findIndex(({id: listId}) => lineId === listId)
             x[index].title = title
-            console.log(x)
         }
     }
     
