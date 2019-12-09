@@ -4,12 +4,14 @@ import TrelloBoard from 'react-trello'
 import { useParams } from 'react-router';
 import api from '../../utils/api';
 import { Board } from '../../typings';
-import { Loader } from 'semantic-ui-react';
+import { Loader, Modal } from 'semantic-ui-react';
+import CardModalContent from '../CardModalContent';
 
 const SingleBoard = () =>  {
     const {id} = useParams()
     const [boardDetails, setBoardDetails] = useState<Board | null>(null)
     const [lines, setLines] = useState<any[]>([])
+    const [chosenCard, setChosenCard] = useState<number | null>(null)
 
     const addLine = ({title}: {title: string}) => {
         if(id) {
@@ -38,13 +40,10 @@ const SingleBoard = () =>  {
             x[index].title = title
         }
     }
-    
-    // const addCard = (card: any, lineId: any) => {
-    //     const x = {...lines}
-    //     const index = lines.findIndex(({id: listId}) => lineId === listId)
-    //     x[index].cards = [...x[index].cards, {title: card.title}]
-    //     console.log(x)
-    // }
+    const clickCard = (cardId: number, metadata: any, lineId: number) => {
+        setChosenCard(cardId)
+    }
+    const closeModal = () => setChosenCard(null )
     
     useEffect(() => {
         if(id) {
@@ -58,12 +57,17 @@ const SingleBoard = () =>  {
     }, [])
     if(boardDetails === null) return <Loader active/>
     const {name} = boardDetails
-    return <div >
-        {name && <div style={{backgroundColor: "#3179ba"}}>
-            <div style={{fontSize: '20px', color: 'white', fontWeight: 'bold', textAlign: 'center', padding: '10px'}}>Nazwa boarda: {name}</div>
-            <TrelloBoard onLaneUpdate={editLine} onLaneDelete={deleteLine} onLaneAdd={addLine} data={{lanes: lines}} canAddLanes editable editLaneTitle/>
-        </div>}
-    </div>
+    return <>
+        <div >
+            {name && <div style={{backgroundColor: "#3179ba"}}>
+                <div style={{fontSize: '20px', color: 'white', fontWeight: 'bold', textAlign: 'center', padding: '10px'}}>Nazwa boarda: {name}</div>
+                <TrelloBoard onCardClick={clickCard} onLaneUpdate={editLine} onLaneDelete={deleteLine} onLaneAdd={addLine} data={{lanes: lines}} canAddLanes editable editLaneTitle/>
+            </div>}
+        </div>
+      <Modal open={!!chosenCard} onClose={closeModal}>
+           <CardModalContent cardId={chosenCard} />
+       </Modal>
+    </>
 }
 
 export default SingleBoard;
