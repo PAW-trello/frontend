@@ -3,6 +3,7 @@ import { Icon, Card } from 'semantic-ui-react'
 
 export const SpinnerContainer = styled.div`
   width: 100%;
+  min-height: 125px;    
   text-align: center;
 `
 

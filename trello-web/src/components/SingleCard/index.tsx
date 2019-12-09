@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SpinnerContainer, IconStyled } from './styled';
-// import api from '../../utils/api';
-// import { toast } from 'react-toastify';
+import api from '../../utils/api';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { Card, Button, Loader } from 'semantic-ui-react';
 interface SingleCardProps {
@@ -30,7 +30,7 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
         //@ts-ignore
         if(inputOpened && e.target && e.target.id !== 'edit-name') {
             console.log("Xs")
-            editCard()
+            // editCard()
         }
     }
 
@@ -39,19 +39,18 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
     }
     
     const editCard = () => {
-        if(inputOpened) {
             setLoadingState(true)
             setInputOpened(false)
-            // api.updateBoard(newName, id).then(({ok}) => {
-            //     if(ok) {
-            //         setLoadingState(true)
-            //     } else {
-            //         toast.error('Nie udało się zaktualizować boarda')
-            //         setNewName(name)
-            //     }
-            // })
-            console.log('edytujre')
-        }
+            api.updateBoard(newName, id).then(({ok}) => {
+                if(ok) {
+                    setLoadingState(false)
+                } else {
+                    setLoadingState(false)
+                    toast.error('Nie udało się zaktualizować boarda')
+                    setNewName(name)
+                }
+            })
+            
     }
     const showInput = () => setInputOpened(true)
 
@@ -68,7 +67,7 @@ const SingleCard = ({id, name, removeBoard}: SingleCardProps) => {
 
     return (
         <Card>
-            {loadingState && <SpinnerContainer>
+            {loadingState && <SpinnerContainer  >
                 <Loader active />
             </SpinnerContainer>}
             {!loadingState && <>
