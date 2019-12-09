@@ -1,5 +1,5 @@
 import apisauce from 'apisauce'
-import { RegisterPayload, LoginPayload,AddBoardPayload } from '../typings'
+import {RegisterPayload, LoginPayload, AddBoardPayload, AddCardPayload} from '../typings'
 
 const baseURL = "https://mighty-hollows-81695.herokuapp.com/"
 
@@ -24,9 +24,11 @@ const create = () => {
     const headers = () => api.headers.Authorization
     const getBoardDetails = (boardId: number) => api.get(`/boards/${boardId}`)
     const addNewLine = (boardId: number, listName: string) => api.post(`/boards/${boardId}/lists`, {title: listName})
-    const removeLine = (boardId: number,lineId: number) => api.delete(`/boards/${boardId}/lists/${lineId}`)
-    const editLine = (boardId: number,lineId: number, newName: string) => api.put(`/boards/${boardId}/lists/${lineId}`, {title: newName})
-
+    const removeLine = (boardId: number, lineId: number) => api.delete(`/boards/${boardId}/lists/${lineId}`)
+    const editLine = (boardId: number, lineId: number, newName: string) => api.put(`/boards/${boardId}/lists/${lineId}`, {title: newName})
+    const addCard = (card: AddCardPayload, laneId: number) => api.post(`/lists/${laneId}/cards`, card);
+    const getCardDetails = (laneId: number, cardId: number) => api.get(`/lists/${laneId}/cards/${cardId}`);
+    const getAllCards = (boardId: number, laneId: number) => api.get(`/boards/${boardId}/lists/${laneId}/cards`);
 
 
     return {
@@ -42,7 +44,10 @@ const create = () => {
         getBoardDetails,
         addNewLine,
         removeLine,
-        editLine
+        editLine,
+        addCard,
+        getCardDetails,
+        getAllCards
     }
 }
 const api = () => create()
