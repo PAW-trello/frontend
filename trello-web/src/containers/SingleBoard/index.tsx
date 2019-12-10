@@ -48,9 +48,9 @@ const SingleBoard = () => {
   };
   const closeModal = () => setChosenCard(null);
 
-  const onCardAdd = (cardId: any, metadata: any, lineId: number) => {
+    const onCardAdd = (cardId: any, metadata: any, lineId: number) => {
     api
-      .addCard(cardId.id, cardId.title, cardId.description)
+      .addCard(lineId, cardId.title, cardId.description)
       .then(({ ok, data }) => {
         if (ok) {
           console.log("added card");
@@ -61,8 +61,17 @@ const SingleBoard = () => {
       });
   };
 
-  const onCardDelete = (cardId: number, metadata: any, lineId: number) => {
-    console.log("delete card");
+  const onCardDelete = (cardId: any, metadata: any, lineId: number) => {
+    api
+    .removeCard(lineId, cardId.Id)
+    .then(({ ok, data }) => {
+      if (ok) {
+        console.log("remove card");
+      } else {
+          console.log("kiła mogiła");
+      }
+
+    });
   };
 
   const handleLineEnd = (_: number, toIndex: number, payload: any) => {
