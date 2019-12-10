@@ -26,7 +26,7 @@ const create = () => {
     const addNewLine = (boardId: number, listName: string) => api.post(`/boards/${boardId}/lists`, {title: listName})
     const removeLine = (boardId: number,lineId: number) => api.delete(`/boards/${boardId}/lists/${lineId}`)
     const editLine = (boardId: number,lineId: number, newName: string) => api.put(`/boards/${boardId}/lists/${lineId}`, {title: newName})
-
+    const changeLineOrder = (toLine: number, lineId: number,) => api.post(`/lists/${lineId}/swap`, {to: toLine + 1})
 
 
     return {
@@ -42,7 +42,8 @@ const create = () => {
         getBoardDetails,
         addNewLine,
         removeLine,
-        editLine
+        editLine, 
+        changeLineOrder
     }
 }
 const api = () => create()

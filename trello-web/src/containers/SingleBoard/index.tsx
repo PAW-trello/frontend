@@ -43,7 +43,11 @@ const SingleBoard = () =>  {
     const clickCard = (cardId: number, metadata: any, lineId: number) => {
         setChosenCard(cardId)
     }
-    const closeModal = () => setChosenCard(null )
+    const closeModal = () => setChosenCard(null)
+
+    const handleLineEnd = (_: number, toIndex: number, payload: any) => {
+        api.changeLineOrder(toIndex, +payload.id)
+    }
     
     useEffect(() => {
         if(id) {
@@ -61,7 +65,7 @@ const SingleBoard = () =>  {
         <div >
             {name && <div style={{backgroundColor: "#3179ba"}}>
                 <div style={{fontSize: '20px', color: 'white', fontWeight: 'bold', textAlign: 'center', padding: '10px'}}>Nazwa boarda: {name}</div>
-                <TrelloBoard onCardClick={clickCard} onLaneUpdate={editLine} onLaneDelete={deleteLine} onLaneAdd={addLine} data={{lanes: lines}} canAddLanes editable editLaneTitle/>
+                <TrelloBoard draggable handleLaneDragEnd={handleLineEnd} onCardClick={clickCard} onLaneUpdate={editLine} onLaneDelete={deleteLine} onLaneAdd={addLine} data={{lanes: lines}} canAddLanes editable editLaneTitle/>
             </div>}
         </div>
       <Modal open={!!chosenCard} onClose={closeModal}>
