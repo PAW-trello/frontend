@@ -53,8 +53,12 @@ const SingleBoard = () =>  {
         if(id) {
             api.getBoardDetails(+id).then(({data}) => {
                 setBoardDetails(data as Board)
+                let lines = []
                 // @ts-ignores
-                const lines = data.lists.map(list => ({...list, id: '' + list.id, cards: []}))
+                if(data.lists){
+                    // @ts-ignores
+                    lines = data.lists.map(list => ({...list, id: '' + list.id, cards: []}))
+                }
                 setLines(lines)
             })
         }
