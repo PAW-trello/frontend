@@ -26,7 +26,15 @@ const create = () => {
     const addNewLine = (boardId: number, listName: string) => api.post(`/boards/${boardId}/lists`, {title: listName})
     const removeLine = (boardId: number,lineId: number) => api.delete(`/boards/${boardId}/lists/${lineId}`)
     const editLine = (boardId: number,lineId: number, newName: string) => api.put(`/boards/${boardId}/lists/${lineId}`, {title: newName})
-
+    const changeLineOrder = (toLine: number, lineId: number) => api.post(`/lists/${lineId}/swap`, {to: toLine + 1})
+    const addCard = (lineId: number, title: string, description?: string, label?: string) => api.post(`/lists/${lineId}/cards`, {title, description, label})
+    const editCard = (lineId: number, cardId: number, title: string, description?: string, label?: string) => api.put(`/lists/${lineId}/cards/${cardId}`, {title, description, label})
+    const removeCard = (lineId: number, cardId: number) => api.delete(`/lists/${lineId}/cards/${cardId}`)
+    const showCardDetails = (lineId: number, cardId: number) => api.get(`/lists/${lineId}/cards/${cardId}`)
+    const addComment = (cardId: number, message: string) => api.post(`cards/${cardId}/comments`, {message, title: ''}) 
+    const editComment = (cardId: number, commentId: number, message: string) => api.put(`/cards/${cardId}/comments/${commentId}`, {message, title: ''})
+    const removeComment = ( cardId: number, commentId: number) => api.delete(`/cards/${cardId}/comments/${commentId}`)
+    const showAllCardComments = (cardId: number) => api.get(`/cards/${cardId}/comments`)
 
 
     return {
@@ -42,7 +50,16 @@ const create = () => {
         getBoardDetails,
         addNewLine,
         removeLine,
-        editLine
+        editLine, 
+        changeLineOrder,
+        addCard,
+        editCard,
+        removeCard,
+        showCardDetails,
+        addComment,
+        editComment,
+        removeComment,
+        showAllCardComments
     }
 }
 const api = () => create()
