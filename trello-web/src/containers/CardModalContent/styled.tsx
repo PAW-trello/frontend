@@ -11,3 +11,8 @@ export const CenteredContainer = styled.div`
   justify-content: center;
   vertical-align: center; 
 `
+export const SpinnerContainer = styled.div`
+  width: 100%;
+  min-height: 125px;    
+  text-align: center;
+`
