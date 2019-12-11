@@ -91,7 +91,6 @@ const SingleBoard = () => {
           lines = data.lists.map(list => ({
             ...list,
             id: "" + list.id,
-            cards: []
           }));
         }
         setLines(lines);
