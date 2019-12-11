@@ -52,17 +52,14 @@ export default ({ cardId, lineId }: Props) => {
                     <Comment.Actions>
                       <Comment.Action>Usuń</Comment.Action>
                       <Comment.Action>Edytuj</Comment.Action>
-                    </Comment.Actions>
+                    </Comment.Actions>  
                   </Comment.Content>
                 </Comment>{" "}
                 <Form reply>
                   <Form.TextArea />
-                  <Button
-                    content="Dodaj komentarz"
-                    labelPosition="left"
-                    icon="edit"
-                    primary
-                  />
+            
+                    <Button>Dodaj komentarz</Button>
+                  
                 </Form>
               </Comment.Group>
             </Modal.Description>
