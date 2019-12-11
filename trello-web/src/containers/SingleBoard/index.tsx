@@ -12,6 +12,7 @@ const SingleBoard = () => {
   const [boardDetails, setBoardDetails] = useState<Board | null>(null);
   const [lines, setLines] = useState<any[]>([]);
   const [chosenCard, setChosenCard] = useState<number | null>(null);
+  const [chosenLine, setChosenLine] = useState<number | null>(null);
 
   const addLine = ({ title }: { title: string }) => {
     if (id) {
@@ -44,6 +45,7 @@ const SingleBoard = () => {
   };
   const clickCard = (cardId: number, metadata: any, lineId: number) => {
     setChosenCard(cardId);
+    setChosenLine(lineId);
     console.log(cardId + "clicked");
   };
   const closeModal = () => setChosenCard(null);
@@ -133,7 +135,7 @@ const SingleBoard = () => {
         )}
       </div>
       <Modal open={!!chosenCard} onClose={closeModal}>
-        <CardModalContent cardId={chosenCard} />
+        <CardModalContent cardId={chosenCard} lineId={chosenLine}/>
       </Modal>
     </>
   );
