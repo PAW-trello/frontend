@@ -46,7 +46,6 @@ export default ({ cardId, lineId }: Props) => {
               Opis: {description}
               <Comment.Group>
                 <Comment>
-                  <Comment.Avatar src="https://a.allegroimg.com/s400/112a4b/40c85ffe417aa6e9a2ca16a46f36/Talk-to-me-duck-kaczka-programista-torba-na" />
                   <Comment.Content>
                     <Comment.Text>Mój pierwszy fajny komentarz!</Comment.Text>
                     <Comment.Actions>
@@ -55,9 +54,17 @@ export default ({ cardId, lineId }: Props) => {
                     </Comment.Actions>  
                   </Comment.Content>
                 </Comment>{" "}
+                <Comment>
+                  <Comment.Content>
+                    <Comment.Text>Mój jest fajniejszy :o</Comment.Text>
+                    <Comment.Actions>
+                      <Comment.Action>Usuń</Comment.Action>
+                      <Comment.Action>Edytuj</Comment.Action>
+                    </Comment.Actions>  
+                  </Comment.Content>
+                </Comment>{" "}
                 <Form reply>
                   <Form.TextArea />
-            
                     <Button>Dodaj komentarz</Button>
                   
                 </Form>
