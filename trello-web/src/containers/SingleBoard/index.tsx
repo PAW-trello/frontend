@@ -64,10 +64,10 @@ const SingleBoard = () => {
       });
   };
 
-  const onCardDelete = (cardId: any, lineId: number) => {
+  const onCardDelete = (cardId: number, lineId: number) => {
     console.log(lineId)
     api
-    .removeCard(lineId, cardId.Id)
+    .removeCard(lineId, cardId)
     .then(({ ok, data }) => {
       if (ok) {
         console.log("remove card");
