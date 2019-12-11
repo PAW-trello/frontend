@@ -48,7 +48,8 @@ const SingleBoard = () => {
   };
   const closeModal = () => setChosenCard(null);
 
-    const onCardAdd = (cardId: any, metadata: any, lineId: number) => {
+  const onCardAdd = (cardId: any, lineId: number) => {
+    console.log(lineId)
     api
       .addCard(lineId, cardId.title, cardId.description)
       .then(({ ok, data }) => {
@@ -61,7 +62,8 @@ const SingleBoard = () => {
       });
   };
 
-  const onCardDelete = (cardId: any, metadata: any, lineId: number) => {
+  const onCardDelete = (cardId: any, lineId: number) => {
+    console.log(lineId)
     api
     .removeCard(lineId, cardId.Id)
     .then(({ ok, data }) => {
