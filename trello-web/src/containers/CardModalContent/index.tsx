@@ -3,10 +3,10 @@ import {
   Modal,
   Loader,
   Button,
-  Comment,
   Form
 } from "semantic-ui-react";
 import api from "../../utils/api";
+import Comment from "../../components/Comment"
 
 type Props = {
   cardId: number | null;
@@ -17,6 +17,7 @@ export default ({ cardId, lineId }: Props) => {
   const [loading, setLoading] = useState(true);
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
+  const [comments, setComments] = useState<Comment[]>([])
   useEffect(() => {
     if (cardId && lineId) {
       api.showCardDetails(lineId, cardId).then(({ ok, data }) => {
@@ -29,11 +30,32 @@ export default ({ cardId, lineId }: Props) => {
           console.log("kiła mogiła");
         }
       });
+      api.showAllCardComments(cardId)
+      .then(({ ok, data }) => {
+        if (ok) {
+          setComments(data as Comment[])
+          console.log("pobrano komentarze");
+          console.log(comments);
+        } else {
+          console.log("kiła mogiła");
+        }
+      });
       setTimeout(() => {
         setLoading(false);
       }, 1000);
     }
   }, [cardId]);
+
+  const renderSingleComment = ({ }: Comment) =>
+    <Comment
+      boardId = {boardId}
+      cardId = {cardId}
+      message = {message}
+      commentId = {commentId}
+      addComment = {addComment}
+    />
+  
+  const addComment = 
 
   return (
     <>
@@ -45,28 +67,11 @@ export default ({ cardId, lineId }: Props) => {
             <Modal.Description>
               Opis: {description}
               <Comment.Group>
-                <Comment>
-                  <Comment.Content>
-                    <Comment.Text>Mój pierwszy fajny komentarz!</Comment.Text>
-                    <Comment.Actions>
-                      <Comment.Action>Usuń</Comment.Action>
-                      <Comment.Action>Edytuj</Comment.Action>
-                    </Comment.Actions>  
-                  </Comment.Content>
-                </Comment>{" "}
-                <Comment>
-                  <Comment.Content>
-                    <Comment.Text>Mój jest fajniejszy :o</Comment.Text>
-                    <Comment.Actions>
-                      <Comment.Action>Usuń</Comment.Action>
-                      <Comment.Action>Edytuj</Comment.Action>
-                    </Comment.Actions>  
-                  </Comment.Content>
-                </Comment>{" "}
+                {comments.map(renderSingleComment)}
                 <Form reply>
-                  <Form.TextArea />
-                    <Button>Dodaj komentarz</Button>
-                  
+                  <Form.TextArea value={message} onChange={updateCommentMessage}/>
+                    <Button onClick={addComment}>Dodaj komentarz</Button>
+   
                 </Form>
               </Comment.Group>
             </Modal.Description>
