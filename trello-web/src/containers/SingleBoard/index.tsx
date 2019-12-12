@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 //@ts-ignore
 import TrelloBoard from "react-trello";
-import { useParams } from "react-router";
+import { useParams, useHistory, useLocation } from "react-router";
 import api from "../../utils/api";
 import { Board } from "../../typings";
 import { Loader, Modal } from "semantic-ui-react";
 import CardModalContent from "../CardModalContent";
 
 const SingleBoard = () => {
+  const {push, replace} = useHistory();
+  const {pathname} = useLocation()
   const { id } = useParams();
   const [boardDetails, setBoardDetails] = useState<Board | null>(null);
   const [lines, setLines] = useState<any[]>([]);
   const [chosenCard, setChosenCard] = useState<number | null>(null);
   const [chosenLine, setChosenLine] = useState<number | null>(null);
-
   const addLine = ({ title }: { title: string }) => {
     if (id) {
       api.addNewLine(+id, title).then(({ data }) => {
@@ -46,17 +47,16 @@ const SingleBoard = () => {
   const clickCard = (cardId: number, metadata: any, lineId: number) => {
     setChosenCard(cardId);
     setChosenLine(lineId);
-    console.log(cardId + "clicked");
   };
   const closeModal = () => setChosenCard(null);
 
   const onCardAdd = (cardId: any, lineId: number) => {
-    console.log(lineId)
     api
       .addCard(lineId, cardId.title, cardId.description)
       .then(({ ok, data }) => {
         if (ok) {
-          console.log("added card");
+          push('/xd')
+          replace(pathname)
         } else {
             console.log("kiła mogiła");
         }
@@ -99,6 +99,7 @@ const SingleBoard = () => {
       });
     }
   }, []);
+
   if (boardDetails === null) return <Loader active />;
   const { name } = boardDetails;
   return (

@@ -13,3 +13,12 @@ export interface AddBoardPayload {
 export interface Board extends AddBoardPayload {
     id: number;
 }
+
+export interface Comment {
+    id: number;
+    title?: string ,
+    message: string,
+    card_id: number,
+    created_at: string,
+    updated_at: string
+}

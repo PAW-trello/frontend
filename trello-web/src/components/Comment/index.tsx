@@ -1,43 +1,32 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Comment as CommentUI
 } from "semantic-ui-react";
-interface CommentProps {
-    boardId: number;
-    cardId: number;
-    message: string;
-    commentId: number;
-    addComment: (cardId: number, message: string) => void;
+import { Comment } from '../../typings';
+import api from '../../utils/api';
+
+interface Props extends Comment {
+  removeCommentProp: (id: number) => void
 }
 
+const CommentComponent = ({card_id, message, id, removeCommentProp} : Props) => {
 
-const Comment = ({boardId, cardId, message,commentId}: CommentProps) => {
-  useEffect(() => {
-    // if(inputOpened) {
-    //     console.log('add')
-    //         window.addEventListener('click', clickListener)
-    // } else {
-    //     console.log('remove')
-    //     window.removeEventListener('click', clickListener)
-    // }
-  }, []);
-
-  // const removeComment = () => {
-  //   // removeComment(id);
-  //   console.log("remove");
-  // };
+  const removeComment = () => {
+    api.removeComment(card_id, id)
+    removeCommentProp(id)
+  };
 
   return (
     <CommentUI>
-      {/* <Comment.Content>
-        <Comment.Text>Mój pierwszy fajny komentarz!</Comment.Text>
-        <Comment.Actions>
-          <Comment.Action>Usuń</Comment.Action>
-          <Comment.Action>Edytuj</Comment.Action>
-        </Comment.Actions>  
-      </Comment.Content> */}
+      <CommentUI.Content>
+        <CommentUI.Text>{message}</CommentUI.Text>
+        <CommentUI.Actions>
+          <CommentUI.Action onClick={removeComment}>Usuń</CommentUI.Action>
+          {/* <CommentUI.Action onClick={editComment}>Edytuj</CommentUI.Action> */}
+        </CommentUI.Actions>  
+      </CommentUI.Content>
   </CommentUI>
   );
 };
 
-export default Comment;
+export default CommentComponent;
