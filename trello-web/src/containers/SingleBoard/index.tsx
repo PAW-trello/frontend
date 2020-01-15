@@ -6,7 +6,8 @@ import api from "../../utils/api";
 import { Board } from "../../typings";
 import { Loader, Modal } from "semantic-ui-react";
 import CardModalContent from "../CardModalContent";
-
+import dayjs from 'dayjs';
+import {set, cloneDeep} from 'lodash'
 const SingleBoard = () => {
   const {push, replace} = useHistory();
   const {pathname} = useLocation()
@@ -45,8 +46,8 @@ const SingleBoard = () => {
     }
   };
   const clickCard = (cardId: number, metadata: any, lineId: number) => {
-    setChosenCard(cardId);
-    setChosenLine(lineId);
+      setChosenCard(cardId);
+      setChosenLine(lineId);
   };
   const closeModal = () => setChosenCard(null);
 
@@ -74,9 +75,19 @@ const SingleBoard = () => {
       } else {
           console.log("kiła mogiła");
       }
-
     });
   };
+
+  const setDate = (lineId: number, cardId: number, date: string) => {
+    const lineIndex = lines.findIndex(({id}) =>{
+       return id  === lineId
+    })
+    // @ts-ignore
+    const cardIndex = lines[lineIndex].cards.findIndex(({id}) => id === cardId)
+    const lineCopy = cloneDeep(lines)
+    set(lineCopy, `[${lineIndex}].cards[${cardIndex}].label`, date)
+    setLines(lineCopy)
+  }
 
   const handleLineEnd = (_: number, toIndex: number, payload: any) => {
     api.changeLineOrder(toIndex, +payload.id);
@@ -93,12 +104,17 @@ const SingleBoard = () => {
           lines = data.lists.map(list => ({
             ...list,
             id: "" + list.id,
+            // @ts-ignores
+            cards: list.cards.map(card => ({
+              ...card,
+              label: card.label ? dayjs(Date.parse(card.label)).format("DD/MM/YYYY HH:mm") : ''
+            }))
           }));
         }
         setLines(lines);
       });
     }
-  }, []);
+  }, [id]);
 
   if (boardDetails === null) return <Loader active />;
   const { name } = boardDetails;
@@ -136,7 +152,7 @@ const SingleBoard = () => {
         )}
       </div>
       <Modal open={!!chosenCard} onClose={closeModal}>
-        <CardModalContent cardId={chosenCard} lineId={chosenLine}/>
+        <CardModalContent setDate={setDate} cardId={chosenCard} lineId={chosenLine}/>
       </Modal>
     </>
   );

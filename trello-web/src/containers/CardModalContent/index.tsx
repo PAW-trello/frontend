@@ -9,18 +9,20 @@ import {
 import api from "../../utils/api";
 import CommentCoponent from "../../components/Comment"
 import { Comment } from '../../typings';
-
+import DatePicker from 'react-datepicker';
+import dayjs from 'dayjs';
 type Props = {
   cardId: number | null;
   lineId: number | null;
+  setDate: (n: number, k: number, x: string) => void
 };
 
-export default ({ cardId, lineId }: Props) => {
+export default ({ cardId, lineId, setDate }: Props) => {
   const [loading, setLoading] = useState(true);
   const [description, setDescription] = useState("");
-  const [label, setLabel] = useState("");
   const [title, setTitle] = useState("");
   const [comments, setComments] = useState<Comment[]>([])
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [newComment, setNewCommnet] = useState('')
   useEffect(() => {
     if (cardId && lineId) {
@@ -29,7 +31,7 @@ export default ({ cardId, lineId }: Props) => {
           const cardInformation = data as any;
           setDescription(cardInformation.description);
           setTitle(cardInformation.title);
-          setLabel(cardInformation.label)
+          cardInformation.label ? setStartDate(new Date(Date.parse(cardInformation.label))) : setStartDate(null)
         } else {
         }
       });
@@ -43,7 +45,7 @@ export default ({ cardId, lineId }: Props) => {
         setLoading(false);
       }, 1000);
     }
-  }, [cardId]);
+  }, [cardId, lineId]);
 
   const removeComment = (removeId: number) => {
     const newComments = comments.filter(({ id }) => id !== removeId)
@@ -64,7 +66,15 @@ export default ({ cardId, lineId }: Props) => {
         }
       })
     }
-  } 
+  }
+
+  const sendStartDate = (date: any) => {
+    setStartDate(date)
+    if(lineId !== null && cardId !== null){
+      setDate(lineId, cardId, dayjs(date).format("DD/MM/YYYY HH:mm"))
+      api.editCard(lineId, cardId, title, description, dayjs(date).toISOString())
+    }
+  }
 
   // @ts-ignore
   const onChange = ({target: {value}}: React.FormEvent<HTMLTextAreaElement>) => {
@@ -81,7 +91,14 @@ export default ({ cardId, lineId }: Props) => {
              <Modal.Description>
                <h2>Opis: {description || 'Brak'}</h2>
                <br/>
-               <h2>Label: {label || 'Brak'}</h2>
+               <h2>Termin:</h2>
+                <DatePicker
+                  selected={startDate} 
+                  onChange={sendStartDate}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  dateFormat="dd/MM/yyyy HH:mm"
+                />
                <br/>
                <h2>Komentarze</h2>
                <SemanticComment.Group>

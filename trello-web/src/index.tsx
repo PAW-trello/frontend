@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {ToastContainer} from "react-toastify";
 import 'semantic-ui-css/semantic.min.css'
 import 'react-toastify/dist/ReactToastify.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 ReactDOM.render(
 <>
