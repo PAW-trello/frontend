@@ -4,7 +4,8 @@ import {
   Loader,
   Comment as SemanticComment,
   Button,
-  TextArea
+  TextArea,
+  Icon
 } from "semantic-ui-react";
 import api from "../../utils/api";
 import CommentCoponent from "../../components/Comment"
@@ -75,6 +76,13 @@ export default ({ cardId, lineId, setDate }: Props) => {
       api.editCard(lineId, cardId, title, description, dayjs(date).toISOString())
     }
   }
+  const removeTime = () => {
+    setStartDate(null)
+    if(lineId !== null && cardId !== null){
+      setDate(lineId, cardId, "")
+      api.editCard(lineId, cardId, title, description,"")
+    }
+  }
 
   // @ts-ignore
   const onChange = ({target: {value}}: React.FormEvent<HTMLTextAreaElement>) => {
@@ -99,6 +107,7 @@ export default ({ cardId, lineId, setDate }: Props) => {
                   timeFormat="HH:mm"
                   dateFormat="dd/MM/yyyy HH:mm"
                 />
+              {startDate && <Icon style={{ cursor: 'pointer' }} name="remove" onClick={removeTime} />}
                <br/>
                <h2>Komentarze</h2>
                <SemanticComment.Group>
